@@ -58,5 +58,10 @@ import java.io.Serializable;
     public void setApe2(String ape2) {
         this.ape2 = ape2;
     }
+
+    @Override
+    public String toString() {
+        return "Profesor{" + "id=" + id + ", nombre=" + nombre + ", ape1=" + ape1 + ", ape2=" + ape2 + '}';
+    }
     
  }

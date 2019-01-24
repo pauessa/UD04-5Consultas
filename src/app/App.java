@@ -5,7 +5,9 @@
  */
 package app;
 
+import java.util.List;
 import model.Profesor;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -26,28 +28,30 @@ public class App {
         //configuration.configure();
         //sessionFactory = configuration.buildSessionFactory();
         SessionFactory factory = new Configuration().configure().buildSessionFactory(); 
-
-        // CREAMOS UN OBJETO
-        Profesor profesor=new Profesor(80,"Pepe","Garcia","Perez");
+        
+      
 
         //CREAR UNA SESION
         Session session=factory.openSession();
-        session.beginTransaction();
-
-        //GUARDAR OBJETO
-        //session.save(profesor);
-
-        Profesor profesor2=(Profesor) session.get(Profesor.class, 1);
-        System.out.println(profesor2);
-
-
-        profesor.setNombre("Manola");
-        session.update(profesor);
-
-        //session.saveOrUpdate(profesor);
-
-        //CERRAR CONEXION
-        session.getTransaction().commit();
+        
+        Query query =session.createQuery("SELECT p FROM Profesor p");
+        List<Profesor> profesores=query.list();
+        for (Profesor profesor : profesores) {
+            System.out.println(profesor);
+        }
+        
+        query=session.createQuery("SELECT p.id,p.nombre FROM Profesor p");
+        List<Object[]>listDatos=query.list();
+        for (Object[] datos : listDatos) {
+            System.out.println(datos[0]+"--"+datos[1]);
+        }
+        
+         query=session.createQuery("SELECT p.nombre FROM Profesor p");
+        List<Object>listaNombres=query.list();
+        for (Object datos : listaNombres) {
+            System.out.println(datos);
+        }
+        
         session.close();
         factory.close();
         
